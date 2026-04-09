@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import QuestionAccordion from './components/QuestionAccordion';
-import { Search, Moon, Sun } from 'lucide-react';
+import { Search, Moon, Sun, Menu, X } from 'lucide-react';
 
 import questionsEn from './data/questions_en.json';
 import questionsAr from './data/questions_ar.json';
@@ -11,6 +11,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [questions, setQuestions] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Study Mode: Track completed questions persistently
   const [completedQs, setCompletedQs] = useState(() => {
@@ -119,7 +120,16 @@ function App() {
     <div className="study-layout">
       {/* Top Fixed Navbar */}
       <nav className="top-navbar">
-        <div className="logo">OSAD 46 Interview</div>
+        <div className="nav-left">
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          <div className="logo">OSAD 46 Interview</div>
+        </div>
         <div className="nav-search-bar search-box">
           <input
             type="text"
@@ -129,29 +139,32 @@ function App() {
           />
         </div>
         <div className="controls" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          {/* Hiding Language Toggle For Now
-          <button onClick={toggleLanguage} className="lang-btn">
-            {i18n.language === 'en' ? 'عربي' : 'English'}
-          </button>
-          */}
           <button onClick={toggleTheme} className="theme-toggle-btn" title="Toggle Light/Dark Mode">
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </div>
         
-        {/* Global Progress Bar spanning the bottom edge of Navbar */}
         <div className="progress-container">
           <div className="progress-bar-fill" style={{ width: `${totalProgress}%` }} />
         </div>
       </nav>
 
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />}
+
       <div className="app-container">
-        <aside className="sidebar">
-          <h2>{t('app_title')}</h2>
+        <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+          <div className="sidebar-header mobile-only">
+            <h2>{t('app_title')}</h2>
+            <button className="close-btn" onClick={() => setIsSidebarOpen(false)}><X size={24} /></button>
+          </div>
           <div className="category-list">
             <button 
               className={`category-btn ${selectedCategory === 'All' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('All')}
+              onClick={() => {
+                setSelectedCategory('All');
+                setIsSidebarOpen(false);
+              }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                 <input 
@@ -172,7 +185,10 @@ function App() {
                 <button 
                   key={catName}
                   className={`category-btn ${selectedCategory === catName ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(catName)}
+                  onClick={() => {
+                    setSelectedCategory(catName);
+                    setIsSidebarOpen(false);
+                  }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                     <input 

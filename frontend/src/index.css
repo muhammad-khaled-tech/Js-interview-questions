@@ -113,11 +113,32 @@ html[dir="rtl"] body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
-  padding: 1rem 2rem;
+  padding: 0.8rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1rem;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: var(--transition-fast);
+}
+
+.mobile-menu-btn:hover {
+  background-color: var(--surface-hover);
 }
 
 .top-navbar .logo {
@@ -216,16 +237,49 @@ html[dir="rtl"] body {
 /* Sidebar styling */
 .sidebar {
   background-color: var(--surface-color);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 1.5rem;
   position: sticky;
-  top: calc(85px + 2rem);
-  max-height: calc(100vh - 85px - 4rem);
+  top: calc(75px + 2rem);
+  max-height: calc(100vh - 75px - 4rem);
   overflow-y: auto;
   box-shadow: var(--shadow-md);
+  transition: transform var(--transition-smooth), opacity var(--transition-smooth);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header .close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  transition: opacity 0.3s ease;
 }
 
 .sidebar h2 {
@@ -580,14 +634,99 @@ html[dir="rtl"] .category-btn:hover {
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .top-navbar {
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
+    padding: 0.8rem 1rem;
   }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .nav-search-bar {
+    max-width: none;
+    order: 3;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .top-navbar {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .nav-left {
+    order: 1;
+  }
+
+  .controls {
+    order: 2;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 100;
+    border-radius: 0;
+    border: none;
+    border-right: 1px solid var(--border-color);
+    transform: translateX(-100%);
+    opacity: 0;
+    margin: 0;
+    max-height: none;
+  }
+
+  html[dir="rtl"] .sidebar {
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+    border-right: none;
+    border-left: 1px solid var(--border-color);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
   .app-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
     padding-top: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .accordion-header {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .accordion-content {
+    padding: 0 1rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-navbar .logo {
+    font-size: 1.25rem;
+  }
+  
+  .accordion-header {
+    font-size: 0.9rem;
   }
 }
 
